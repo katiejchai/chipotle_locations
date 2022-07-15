@@ -1,0 +1,35 @@
+---
+title: "Map of Chipotle Locations"
+author: "Katie Chai"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message=FALSE}
+library(leaflet); library(tidyverse)
+```
+
+```{r}
+# download data zip file from Kaggle: https://www.kaggle.com/datasets/jeffreybraun/chipotle-locations/
+# working directory should be 'archive' folder that results from unzipping downloaded 'archive.zip' to load 'chipotle_stores.csv'
+chipotledf <- read.csv("chipotle_stores.csv")
+chipotledf <- chipotledf %>%
+  mutate(address = str_remove(address, " [0-9]+ US")) %>%
+  mutate(address = str_replace(address, location, paste0("<br>", location)))
+markericon <- makeIcon("https://1000logos.net/wp-content/uploads/2021/04/Chipotle-logo-500x281.png", iconWidth=100, iconHeight=60)
+```
+
+```{r, out.width="100%"}
+chipotledf[,4:5] %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(popup=chipotledf$address, 
+             icon=markericon,
+             clusterOptions=markerClusterOptions())
+```
+
+This site shows a map of Chipotle Mexican Grill locations throughout the United States. The data for this map visualization was obtained from the "Chipotle Locations" dataset on Kaggle by Jeffrey Braun. The Kaggle page for the original dataset can be found at the following [link](https://www.kaggle.com/datasets/jeffreybraun/chipotle-locations/).
