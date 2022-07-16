@@ -15,8 +15,8 @@ library(leaflet); library(tidyverse)
 
 ```{r}
 # download data zip file from Kaggle: https://www.kaggle.com/datasets/jeffreybraun/chipotle-locations/
-# working directory should be 'archive' folder that results from unzipping downloaded 'archive.zip' to load 'chipotle_stores.csv'
-chipotledf <- read.csv("chipotle_stores.csv")
+# input_data folder contains 'chipotle_stores.csv'
+chipotledf <- read.csv("input_data/chipotle_stores.csv")
 chipotledf <- chipotledf %>%
   mutate(address = str_remove(address, " [0-9]+ US")) %>%
   mutate(address = str_replace(address, location, paste0("<br>", location)))
